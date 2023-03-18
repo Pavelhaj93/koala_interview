@@ -1,4 +1,4 @@
-import { Button, Collapse, Icon, Stack, styled, TableCell, TableRow } from '@mui/material';
+import { Button, Collapse, Icon, Stack, styled, TableCell, TableRow, TableRowProps, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 import { Data, Nemesis } from '../types';
 import { getCollapseIcon } from '../utils';
@@ -7,21 +7,16 @@ import NemesisDataGrid from './NemesisDataGrid';
 interface CustomTableRowProps {
   item: Data;
   dataChildren?: Nemesis[];
+  sx?: TableRowProps['sx'];
 }
 
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: '#f2f2f2',
-  },
-}));
-
-const CustomTableRow: FC<CustomTableRowProps> = ({ item, dataChildren }) => {
+const CustomTableRow: FC<CustomTableRowProps> = ({ item, dataChildren, sx }) => {
   const [openCollapse, setOpenCollapse] = useState<boolean>(false);
   console.log('item', item, 'dataChildren', dataChildren);
 
   return (
     <>
-      <StyledTableRow>
+      <TableRow sx={{ ...sx }}>
         <TableCell>
           {dataChildren && (
             <Button onClick={() => setOpenCollapse(!openCollapse)} sx={{ cursor: 'pointer' }}>
@@ -30,16 +25,18 @@ const CustomTableRow: FC<CustomTableRowProps> = ({ item, dataChildren }) => {
           )}
         </TableCell>
         {Object.values(item).map((row, index) => (
-          <TableCell key={index}>{row}</TableCell>
+          <TableCell key={index}>
+            <Typography color="primary">{row}</Typography>
+          </TableCell>
         ))}
-      </StyledTableRow>
-      <StyledTableRow>
+      </TableRow>
+      <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={openCollapse} timeout="auto" unmountOnExit>
             {dataChildren && <NemesisDataGrid items={dataChildren} />}
           </Collapse>
         </TableCell>
-      </StyledTableRow>
+      </TableRow>
     </>
   );
 };
