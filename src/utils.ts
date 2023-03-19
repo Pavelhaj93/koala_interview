@@ -11,3 +11,5 @@ export const iconByCollapseStatus: Record<number, typeof SvgIcon | ElementType> 
 };
 
 export const getCollapseIcon = (openCollapse: number) => iconByCollapseStatus[openCollapse];
+
+export const getOddColor = (index: number) => (index % 2 === 0 ? 'secondary.main' : 'secondary.dark');

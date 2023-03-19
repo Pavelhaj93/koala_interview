@@ -17,8 +17,6 @@ const NemesisTableRow: FC<NemesisTableRowProps> = ({ item, dataChildren, sx }) =
   const { deleteItem } = useContext(DataContext);
   const headers = dataChildren?.[0]?.data && getHeaders<SecreteData>(dataChildren?.[0]?.data);
 
-  if (!item) return null;
-
   return (
     <>
       <TableRow sx={{ ...sx }}>

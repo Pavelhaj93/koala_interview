@@ -1,14 +1,18 @@
-import { Box, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Button, Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { FC, useContext } from 'react';
 import { DataContext } from '../context/DataContext';
 import StyledTable from '../styled/StyledTable';
 import { Data } from '../types';
-import { getHeaders } from '../utils';
+import { getHeaders, getOddColor } from '../utils';
 import MainTableRow from './MainTableRow';
 
 const MainDataGrid: FC = () => {
   const { data } = useContext(DataContext);
   const headers = data?.[0]?.data && getHeaders<Data>(data?.[0].data);
+
+  function reload() {
+    window.location.reload();
+  }
 
   if (data && headers) {
     return (
@@ -28,14 +32,21 @@ const MainDataGrid: FC = () => {
               item={item.data}
               dataChildren={item.children?.has_nemesis?.records}
               key={item.data.ID}
-              sx={{ backgroundColor: index % 2 == 0 ? 'secondary.main' : 'secondary.dark' }}
+              sx={{ backgroundColor: getOddColor(index) }}
             />
           ))}
         </TableBody>
       </StyledTable>
     );
   } else {
-    return <Box>No data</Box>;
+    return (
+      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Typography variant="h2">No data</Typography>
+        <Button color="primary" variant="contained" onClick={() => reload()}>
+          Reload
+        </Button>
+      </Stack>
+    );
   }
 };
 

@@ -2,6 +2,7 @@ import { TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { FC } from 'react';
 import StyledTable from '../styled/StyledTable';
 import { Nemesis } from '../types';
+import { getOddColor } from '../utils';
 
 import NemesisTableRow from './NemesisTableRow';
 
@@ -13,12 +14,13 @@ interface NemesisDataGridProps {
 const NemesisDataGrid: FC<NemesisDataGridProps> = ({ items, headers }) => {
   return (
     <StyledTable sx={{ paddingLeft: '50px', overflow: 'hidden', width: '50vw' }}>
-      <TableHead sx={{ backgroundColor: '#46d7b3' }}>
+      <TableHead sx={{ backgroundColor: 'primary.main' }}>
         <TableRow>
           <TableCell></TableCell>
           {headers?.map((item, index) => {
             return <TableCell key={index}>{item}</TableCell>;
           })}
+          <TableCell>Delete</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -27,7 +29,7 @@ const NemesisDataGrid: FC<NemesisDataGridProps> = ({ items, headers }) => {
             item={item.data}
             key={item.data.ID}
             dataChildren={item.children.has_secrete.records}
-            sx={{ backgroundColor: index % 2 == 0 ? 'secondary.main' : 'secondary.dark' }}
+            sx={{ backgroundColor: getOddColor(index) }}
           />
         ))}
       </TableBody>

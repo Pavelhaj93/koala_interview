@@ -59,8 +59,6 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
             return item;
           })
         );
-      default:
-        return setData([]);
     }
   };
 
