@@ -1,37 +1,35 @@
 import { createContext, FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { Item } from '../types';
+import { Item, TableLayer } from '../types';
 
 interface DataContextProps {
   data: Item[] | null;
+  loading: boolean;
+  error: string;
   setData: (value: SetStateAction<Item[] | null>) => void;
-  deleteItem: (id: string, layer: string) => void;
+  deleteItem: (id: string, layer: TableLayer) => void;
 }
 
 export const DataContext = createContext<DataContextProps>({
   data: null,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  loading: true,
+  error: '',
   setData: () => [],
   deleteItem: () => [],
 });
 
 export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
   const [data, setData] = useState<DataContextProps['data']>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>('');
 
-  const getData = async () => {
-    const response = await fetch('/data/example-data.json');
-    const data = await response.json();
-    setData(data);
-  };
-
-  const deleteItem = (id: string, layer: string) => {
-    if (!data) return setData([]);
+  const deleteItem = (id: string, layer: TableLayer) => {
+    if (!data) return;
     switch (layer) {
       case 'main':
         if (data) {
           return setData(data?.filter((item) => item.data.ID !== id));
-        } else {
-          return setData([]);
         }
+        return data;
       case 'nemesis':
         return setData(
           data?.map((item) => {
@@ -59,14 +57,28 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
             return item;
           })
         );
+      default:
+        return data;
     }
   };
 
   useEffect(() => {
-    getData();
+    async function fetchData() {
+      try {
+        const response = await fetch('./data/example-data.json');
+        const data = await response.json();
+        setData(data);
+      } catch (error) {
+        console.error(error);
+        setError('Error fetching data');
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
   }, []);
 
-  const value = useMemo<DataContextProps>(() => ({ data, setData, deleteItem }), [data]);
+  const value = useMemo<DataContextProps>(() => ({ data, loading, error, setData, deleteItem }), [data]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

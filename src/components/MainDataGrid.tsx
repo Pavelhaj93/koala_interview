@@ -1,17 +1,24 @@
-import { Button, Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Alert, Button, Stack, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import { FC, useContext } from 'react';
 import { DataContext } from '../context/DataContext';
+
 import StyledTable from '../styled/StyledTable';
 import { Data } from '../types';
-import { getHeaders, getOddColor } from '../utils';
+import { getHeaders, getOddColor, reload } from '../utils';
 import MainTableRow from './MainTableRow';
 
 const MainDataGrid: FC = () => {
-  const { data } = useContext(DataContext);
+  const { data, loading, error } = useContext(DataContext);
+
+  console.log('new', data);
   const headers = data?.[0]?.data && getHeaders<Data>(data?.[0].data);
 
-  function reload() {
-    window.location.reload();
+  if (loading) {
+    return <Typography variant="h2">Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
   }
 
   if (data && headers) {
@@ -38,16 +45,15 @@ const MainDataGrid: FC = () => {
         </TableBody>
       </StyledTable>
     );
-  } else {
-    return (
-      <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        <Typography variant="h2">No data</Typography>
-        <Button color="primary" variant="contained" onClick={() => reload()}>
-          Reload
-        </Button>
-      </Stack>
-    );
   }
+  return (
+    <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Typography variant="h2">No data</Typography>
+      <Button color="primary" variant="contained" onClick={reload}>
+        Reload
+      </Button>
+    </Stack>
+  );
 };
 
 export default MainDataGrid;

@@ -1,7 +1,7 @@
 import { Button, TableCell, TableRow, TableRowProps } from '@mui/material';
 import { FC, useContext } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { SecreteData } from '../types';
+import { SecreteData, TableLayer } from '../types';
 import { DataContext } from '../context/DataContext';
 
 interface SecreteTableRowProps {
@@ -21,7 +21,7 @@ const SecreteTableRow: FC<SecreteTableRowProps> = ({ item, sx }) => {
         ))}
         <TableCell>
           <Button>
-            <CloseIcon color="error" onClick={() => deleteItem(item.ID, 'secrete')} />
+            <CloseIcon color="error" onClick={() => deleteItem(item.ID, TableLayer.SECRETE)} />
           </Button>
         </TableCell>
       </TableRow>

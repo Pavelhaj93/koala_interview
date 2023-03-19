@@ -1,6 +1,6 @@
 import { Button, Collapse, Icon, TableCell, TableRow, TableRowProps } from '@mui/material';
 import { FC, useContext, useState } from 'react';
-import { NemesisData, Secrete, SecreteData } from '../types';
+import { NemesisData, Secrete, SecreteData, TableLayer } from '../types';
 import { getCollapseIcon, getHeaders } from '../utils';
 import SecreteDataGrid from './SecreteDataGrid';
 import CloseIcon from '@mui/icons-material/Close';
@@ -32,7 +32,7 @@ const NemesisTableRow: FC<NemesisTableRowProps> = ({ item, dataChildren, sx }) =
         ))}
         <TableCell>
           <Button>
-            <CloseIcon color="error" onClick={() => deleteItem(item.ID, 'nemesis')} />
+            <CloseIcon color="error" onClick={() => deleteItem(item.ID, TableLayer.NEMESIS)} />
           </Button>
         </TableCell>
       </TableRow>

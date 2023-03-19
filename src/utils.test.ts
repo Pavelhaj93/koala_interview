@@ -1,8 +1,8 @@
-import { mockItem } from './mockData';
+import { mockItem } from './mockItem';
 import { Data, Item, NemesisData, SecreteData } from './types';
 import { getHeaders, getOddColor } from './utils';
 
-describe('utils', () => {
+describe('getHeaders utils', () => {
   const result = Object.keys(mockItem.data);
   const result2 = Object.keys(mockItem);
   const result3 = Object.keys(mockItem.children?.has_nemesis?.records[0].data ?? {});

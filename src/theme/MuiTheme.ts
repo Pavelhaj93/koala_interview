@@ -21,5 +21,12 @@ export const theme: ThemeOptions = createTheme({
         },
       },
     },
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          margin: 0,
+        },
+      },
+    },
   },
 });
