@@ -1,6 +1,6 @@
-import { createTheme } from '@mui/material';
+import { createTheme, ThemeOptions } from '@mui/material';
 
-export const theme = createTheme({
+export const theme: ThemeOptions = createTheme({
   palette: {
     primary: {
       main: '#46d7b3',
@@ -10,7 +10,16 @@ export const theme = createTheme({
       dark: '#1a1a1a',
     },
     text: {
-      primary: '#111111',
+      primary: '#fff',
+    },
+  },
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          borderBottom: 'none',
+        },
+      },
     },
   },
 });

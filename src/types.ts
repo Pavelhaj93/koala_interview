@@ -57,3 +57,9 @@ export type SecreteData = {
 };
 
 export type SecreteChildren = unknown;
+
+export enum TableLayer {
+  MAIN = 'main',
+  NEMESIS = 'nemesis',
+  SECRETE = 'secrete',
+}
