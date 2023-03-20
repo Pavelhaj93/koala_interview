@@ -7,13 +7,13 @@ import NemesisDataGrid from './NemesisDataGrid';
 import CloseIcon from '@mui/icons-material/Close';
 import { DataContext } from '../context/DataContext';
 
-interface CustomTableRowProps {
+interface MainTableRowProps {
   item: Data;
   dataChildren?: Nemesis[];
   sx?: TableRowProps['sx'];
 }
 
-const CustomTableRow: FC<CustomTableRowProps> = ({ item, dataChildren, sx }) => {
+const MainTableRow: FC<MainTableRowProps> = ({ item, dataChildren, sx }) => {
   const [openCollapse, setOpenCollapse] = useState<boolean>(false);
   const { deleteItem } = useContext(DataContext);
   const headers = dataChildren?.[0]?.data && getHeaders<NemesisData>(dataChildren?.[0]?.data);
@@ -50,4 +50,4 @@ const CustomTableRow: FC<CustomTableRowProps> = ({ item, dataChildren, sx }) => 
   );
 };
 
-export default CustomTableRow;
+export default MainTableRow;
