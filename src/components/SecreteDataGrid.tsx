@@ -1,10 +1,10 @@
 import { TableBody, TableCell, TableHead, TableRow } from '@mui/material';
-import { FC } from 'react';
+import { FC, useContext } from 'react';
+import { DataContext } from '../context/DataContext';
 import StyledTable from '../styled/StyledTable';
-import { Secrete } from '../types';
+import { Secrete, TableLayer } from '../types';
 import { getOddColor } from '../utils';
-
-import SecreteTableRow from './SecreteTableRow';
+import GenericTableRow from './GenericTableRow';
 
 interface SecreteDataGridProps {
   items: Secrete[];
@@ -12,6 +12,7 @@ interface SecreteDataGridProps {
 }
 
 const SecreteDataGrid: FC<SecreteDataGridProps> = ({ items, headers }) => {
+  const { deleteItem } = useContext(DataContext);
   return (
     <StyledTable sx={{ paddingLeft: '120px', overflow: 'hidden', width: '35vw' }}>
       <TableHead sx={{ backgroundColor: 'primary.main' }}>
@@ -25,7 +26,12 @@ const SecreteDataGrid: FC<SecreteDataGridProps> = ({ items, headers }) => {
       </TableHead>
       <TableBody>
         {items.map((item, index) => (
-          <SecreteTableRow item={item.data} key={item.data.ID} sx={{ backgroundColor: getOddColor(index) }} />
+          <GenericTableRow
+            item={item.data}
+            key={item.data.ID}
+            sx={{ backgroundColor: getOddColor(index) }}
+            handleDelete={() => deleteItem(item.data.ID, TableLayer.SECRETE)}
+          />
         ))}
       </TableBody>
     </StyledTable>

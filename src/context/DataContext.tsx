@@ -1,4 +1,4 @@
-import { createContext, FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
+import React, { createContext, FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Item, TableLayer } from '../types';
 
 interface DataContextProps {
@@ -9,30 +9,29 @@ interface DataContextProps {
   deleteItem: (id: string, layer: TableLayer) => void;
 }
 
-export const DataContext = createContext<DataContextProps>({
+const DEFAULT_DATA_CONTEXT_PROPS: DataContextProps = {
   data: null,
   loading: true,
   error: '',
   setData: () => [],
   deleteItem: () => [],
-});
+};
+
+export const DataContext = createContext<DataContextProps>(DEFAULT_DATA_CONTEXT_PROPS);
 
 export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [data, setData] = useState<DataContextProps['data']>(null);
+  const [data, setData] = useState<Item[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
 
   const deleteItem = (id: string, layer: TableLayer) => {
-    if (!data) return;
+    if (!data) return null;
     switch (layer) {
       case 'main':
-        if (data) {
-          return setData(data?.filter((item) => item.data.ID !== id));
-        }
-        return data;
+        return setData(data.filter((item) => item.data.ID !== id));
       case 'nemesis':
         return setData(
-          data?.map((item) => {
+          data.map((item) => {
             if (item.children?.has_nemesis?.records) {
               item.children.has_nemesis.records = item.children.has_nemesis.records.filter(
                 (nemesis) => nemesis.data.ID !== id
@@ -43,7 +42,7 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
         );
       case 'secrete':
         return setData(
-          data?.map((item) => {
+          data.map((item) => {
             if (item.children?.has_nemesis?.records) {
               item.children.has_nemesis.records = item.children.has_nemesis.records.map((nemesis) => {
                 if (nemesis.children?.has_secrete?.records) {
@@ -58,7 +57,7 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
           })
         );
       default:
-        return data;
+        return null;
     }
   };
 
@@ -78,7 +77,7 @@ export const DataProvider: FC<PropsWithChildren> = ({ children }) => {
     fetchData();
   }, []);
 
-  const value = useMemo<DataContextProps>(() => ({ data, loading, error, setData, deleteItem }), [data]);
+  const value = useMemo(() => ({ data, loading, error, setData, deleteItem }), [data]);
 
   return <DataContext.Provider value={value}>{children}</DataContext.Provider>;
 };

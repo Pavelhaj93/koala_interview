@@ -3,15 +3,16 @@ import { FC, useContext } from 'react';
 import { DataContext } from '../context/DataContext';
 
 import StyledTable from '../styled/StyledTable';
-import { Data } from '../types';
+import { Data, NemesisData, TableLayer } from '../types';
 import { getHeaders, getOddColor, reload } from '../utils';
-import MainTableRow from './MainTableRow';
+import GenericTableRow from './GenericTableRow';
+import NemesisDataGrid from './NemesisDataGrid';
 
 const MainDataGrid: FC = () => {
   const { data, loading, error } = useContext(DataContext);
+  const { deleteItem } = useContext(DataContext);
 
-  console.log('new', data);
-  const headers = data?.[0]?.data && getHeaders<Data>(data?.[0].data);
+  const headers = getHeaders<Data>(data?.[0].data);
 
   if (loading) {
     return <Typography variant="h2">Loading...</Typography>;
@@ -21,7 +22,7 @@ const MainDataGrid: FC = () => {
     return <Alert severity="error">{error}</Alert>;
   }
 
-  if (data && headers) {
+  if (data) {
     return (
       <StyledTable>
         <TableHead sx={{ backgroundColor: 'primary.main' }}>
@@ -35,17 +36,26 @@ const MainDataGrid: FC = () => {
         </TableHead>
         <TableBody>
           {data?.map((item, index) => (
-            <MainTableRow
+            <GenericTableRow
+              key={item.data.ID}
               item={item.data}
               dataChildren={item.children?.has_nemesis?.records}
-              key={item.data.ID}
               sx={{ backgroundColor: getOddColor(index) }}
-            />
+              handleDelete={() => deleteItem(item.data.ID, TableLayer.MAIN)}
+            >
+              {item.children?.has_nemesis?.records && (
+                <NemesisDataGrid
+                  items={item.children.has_nemesis.records}
+                  headers={getHeaders<NemesisData>(item.children?.has_nemesis?.records?.[0]?.data)}
+                />
+              )}
+            </GenericTableRow>
           ))}
         </TableBody>
       </StyledTable>
     );
   }
+
   return (
     <Stack sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
       <Typography variant="h2">No data</Typography>
