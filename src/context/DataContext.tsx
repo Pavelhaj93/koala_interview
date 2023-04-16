@@ -1,4 +1,4 @@
-import React, { createContext, FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
+import { createContext, FC, PropsWithChildren, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Item, TableLayer } from '../types';
 
 interface DataContextProps {

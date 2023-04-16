@@ -16,7 +16,7 @@ interface NemesisDataGridProps {
 const NemesisDataGrid: FC<NemesisDataGridProps> = ({ items, headers }) => {
   const { deleteItem } = useContext(DataContext);
 
-  return (
+  return items.length ? (
     <StyledTable sx={{ paddingLeft: '50px', overflow: 'hidden', width: '50vw' }}>
       <TableHead sx={{ backgroundColor: 'primary.main' }}>
         <TableRow>
@@ -32,19 +32,19 @@ const NemesisDataGrid: FC<NemesisDataGridProps> = ({ items, headers }) => {
           <GenericTableRow
             key={item.data.ID}
             item={item.data}
-            dataChildren={item.children.has_secrete.records}
+            dataChildren={item.children?.has_secrete?.records}
             sx={{ backgroundColor: getOddColor(index) }}
             handleDelete={() => deleteItem(item.data.ID, TableLayer.NEMESIS)}
           >
             <SecreteDataGrid
-              items={item.children.has_secrete.records}
-              headers={getHeaders<SecreteData>(item.children.has_secrete.records?.[0]?.data)}
+              items={item.children?.has_secrete?.records}
+              headers={getHeaders<SecreteData>(item.children?.has_secrete?.records?.[0]?.data)}
             ></SecreteDataGrid>
           </GenericTableRow>
         ))}
       </TableBody>
     </StyledTable>
-  );
+  ) : null;
 };
 
 export default NemesisDataGrid;

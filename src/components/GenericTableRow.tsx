@@ -3,6 +3,10 @@ import { PropsWithChildren, ReactNode, useState } from 'react';
 import { getCollapseIcon } from '../utils';
 import CloseIcon from '@mui/icons-material/Close';
 
+export const dataTestIds = {
+  deleteButton: 'delete-button',
+};
+
 interface GenericTableRowProps<T extends { [s: string]: ReactNode } | ArrayLike<ReactNode>, CH>
   extends PropsWithChildren {
   item: T;
@@ -24,11 +28,15 @@ function GenericTableRow<T extends { [s: string]: ReactNode } | ArrayLike<ReactN
     <>
       <TableRow sx={{ ...sx }}>
         <TableCell>
-          {dataChildren && (
-            <Button onClick={() => setOpenCollapse(!openCollapse)} sx={{ cursor: 'pointer' }}>
+          {dataChildren?.length ? (
+            <Button
+              onClick={() => setOpenCollapse(!openCollapse)}
+              sx={{ cursor: 'pointer' }}
+              data-testid={dataTestIds.deleteButton}
+            >
               <Icon color="primary" component={getCollapseIcon(openCollapse ? 1 : 0)} fontSize="large" />
             </Button>
-          )}
+          ) : null}
         </TableCell>
         {Object.values(item).map((row, index) => (
           <TableCell key={index}>{row}</TableCell>

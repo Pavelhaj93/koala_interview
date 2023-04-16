@@ -13,7 +13,8 @@ interface SecreteDataGridProps {
 
 const SecreteDataGrid: FC<SecreteDataGridProps> = ({ items, headers }) => {
   const { deleteItem } = useContext(DataContext);
-  return (
+
+  return items.length ? (
     <StyledTable sx={{ paddingLeft: '120px', overflow: 'hidden', width: '35vw' }}>
       <TableHead sx={{ backgroundColor: 'primary.main' }}>
         <TableRow>
@@ -35,7 +36,7 @@ const SecreteDataGrid: FC<SecreteDataGridProps> = ({ items, headers }) => {
         ))}
       </TableBody>
     </StyledTable>
-  );
+  ) : null;
 };
 
 export default SecreteDataGrid;
